@@ -1,0 +1,10 @@
+black==24.8.0
+Flask==3.0.3
+googletrans==4.0.0rc1
+isort==5.13.2
+numpy==2.1.1
+opencv-python==4.10.0.84
+waitress==3.0.0
+opencv-python==4.10.0.84
+pytesseract==0.3.13
+translate==3.6.1
