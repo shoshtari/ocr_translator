@@ -18,5 +18,4 @@ COPY . /src/
 # Expose the port that the app runs on
 EXPOSE 4040
 
-# Command to run the application using Gunicorn
 CMD ["python", "/src/main.py"]
