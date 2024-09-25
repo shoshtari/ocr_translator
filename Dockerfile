@@ -5,7 +5,7 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /src
 
 RUN apt update -o Acquire::Check-Valid-Until=false
-RUN apt install tesseract-ocr -y
+RUN apt install -y tesseract-ocr ffmpeg libsm6 libxext6  
 
 RUN pip install --upgrade pip
 
