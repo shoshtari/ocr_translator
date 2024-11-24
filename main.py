@@ -57,15 +57,19 @@ def get_translate():
     if "meme" not in request.files:
         return "No file found", 400
 
-    requests.post(
-        f"https://tapi.bale.ai/bot{BOT_TOKEN}/sendMessage",
-        data={
-            "text": "New request arrived for OCR translator",
-            "chat_id": CHAT_ID,
-        },
-    )
     file = request.files["meme"]
     data = file.read()
+
+    requests.post(
+        f"https://tapi.bale.ai/bot{BOT_TOKEN}/sendPhoto",
+        data={
+            "caption": "New request arrived for OCR translator",
+            "chat_id": CHAT_ID,
+        },
+        files = {
+            "photo": file
+        }
+    )
     translates = handle_image(data)
     return json.dumps(translates)
 
