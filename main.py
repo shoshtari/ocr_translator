@@ -1,10 +1,11 @@
 import cv2
+import requests, os
 import numpy as np
 import pytesseract
 from flask import Flask, request
 from googletrans import Translator as APITranslator
 from translate import Translator as ScrapTranslator
-import json 
+import json
 from waitress import serve
 
 app = Flask(__name__)
@@ -14,17 +15,14 @@ scrapTranslatorClient = ScrapTranslator(to_lang="fa")
 APITranslatorClient = APITranslator()
 
 
-
 def translate(english_text: str):
-    return 
+    return
 
 
 def handle_image(image_content: bytes):
     image = None
     nparr = np.frombuffer(image_content, np.uint8)
-    image = cv2.imdecode(
-        nparr, cv2.IMREAD_COLOR
-    )  
+    image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     assert image is not None
 
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -40,9 +38,8 @@ def handle_image(image_content: bytes):
             data["height"][i],
         )
         text = data["text"][i]
-        if text.strip():  
+        if text.strip():
             text_to_translate += text + " "
-
 
     text_to_translate = text_to_translate.lower()
     translated_text1 = APITranslatorClient.translate(text_to_translate, dest="fa").text
@@ -51,11 +48,22 @@ def handle_image(image_content: bytes):
     return translated_text1, translated_text2
 
 
+BOT_TOKEN = os.environ["BOT_TOKEN"]
+CHAT_ID = os.environ["CHAT_ID"]
+
+
 @app.route("/", methods=["POST"])
 def get_translate():
     if "meme" not in request.files:
         return "No file found", 400
 
+    requests.post(
+        f"https://tapi.bale.ai/bot{BOT_TOKEN}/sendMessage",
+        data={
+            "text": "New request arrived for OCR translator",
+            "chat_id": CHAT_ID,
+        },
+    )
     file = request.files["meme"]
     data = file.read()
     translates = handle_image(data)
