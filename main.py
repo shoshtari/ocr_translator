@@ -60,18 +60,6 @@ def get_translate():
     file = request.files["meme"]
     data = file.read()
 
-    res = requests.post(
-        f"https://tapi.bale.ai/bot{BOT_TOKEN}/sendPhoto",
-        data={
-            "caption": "New request arrived for OCR translator",
-            "chat_id": CHAT_ID,
-        },
-        files = {
-            "photo": data,
-        }
-    )
-    if res.status_code != 200:
-        print("status code is ", res.status_code, "content is", res.content)
     translates = handle_image(data)
     return json.dumps(translates)
 
